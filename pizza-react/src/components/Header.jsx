@@ -1,13 +1,10 @@
-import { React, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search } from "./Search";
-// import { Context } from "./context";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import logoSvg from "../assets/img/pizza-logo.svg";
 
 const Header = () => {
-  const countPizza = useSelector((state) => state.pizza.countPizza);
   const pizzas = useSelector((state) => state.pizza.pizzas);
   const amount = useSelector((state) => state.pizza.amount);
   return (

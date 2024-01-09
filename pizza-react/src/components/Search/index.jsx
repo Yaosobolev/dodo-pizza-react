@@ -1,22 +1,14 @@
-import {
-  React,
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-} from "react";
+import { useState, useRef, useCallback } from "react";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 
 import style from "./Search.module.scss";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSearchValue } from "../../redux/slices/filterSlice";
 
 import debounce from "lodash.debounce";
 
 export const Search = () => {
-  const searchValue = useSelector((state) => state.filter.searchValue);
   const dispatch = useDispatch();
 
   const [value, setValue] = useState("");

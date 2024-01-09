@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setIndex } from "../../redux/slices/pizzaSlice";
-import { setSelectedIndex } from "../../redux/slices/pizzaSlice";
-import { setUniqPizzas, setPizzas } from "../../redux/slices/pizzaSlice";
+import {
+  setUniqPizzas,
+  setPizzas,
+  setDecrementPizza,
+  setAmount,
+  setRemovePizza,
+} from "../../redux/slices/pizzaSlice";
 
 const CartPizza = (props) => {
   const dispatch = useDispatch();
-  const index = useSelector((state) => state.pizza.index);
   const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
-  const pizzas = useSelector((state) => state.pizza.pizzas);
-
-  useEffect(() => {
-    dispatch(setIndex(props.index));
-    dispatch(setSelectedIndex(index));
-    // console.log(props.index);
-  }, []);
-  // console.log(index);
 
   const countSelectedPizza = uniqPizzas.map((item) => {
     if (
@@ -26,24 +21,47 @@ const CartPizza = (props) => {
       return item.count;
     }
   });
+  const nameSelectedPizza = uniqPizzas.map((item) => {
+    if (
+      props.title === item.title &&
+      props.type === item.type &&
+      props.size === item.size
+    ) {
+      return item;
+    }
+  });
 
   const checkCountSelectedPizza = countSelectedPizza.filter(
     (item) => item !== undefined
   );
 
-  const handlerDencrement = (data) => {
-    dispatch(setPizzas(data));
-    setCount(counts - 1);
-    // dispatch(setUniqPizzas());
-  };
-  const [counts, setCount] = useState(
-    Number(checkCountSelectedPizza)
-    // parseInt(checkCountSelectedPizza.join(""), 10)
+  const checkNameSelectedPizza = nameSelectedPizza.filter(
+    (item) => item !== undefined
   );
 
+  const handlerIncrement = (data) => {
+    setCount(counts + 1);
+    dispatch(setPizzas(data));
+    dispatch(setUniqPizzas());
+  };
+  const [counts, setCount] = useState(Number(checkCountSelectedPizza));
+
   useEffect(() => {
-    setCount(Number(checkCountSelectedPizza) - 1);
-  }, [counts]);
+    setCount(Number(checkCountSelectedPizza) + 1);
+    dispatch(setAmount());
+  }, [checkCountSelectedPizza]);
+
+  const handlerDecrement = () => {
+    dispatch(setDecrementPizza(checkNameSelectedPizza));
+    dispatch(setUniqPizzas());
+    dispatch(setAmount());
+  };
+
+  const handlerRemovePizza = () => {
+    dispatch(setRemovePizza(checkNameSelectedPizza));
+    dispatch(setUniqPizzas());
+    dispatch(setAmount());
+  };
 
   const pizza = {
     imageUrl: props.imageUrl,
@@ -55,7 +73,6 @@ const CartPizza = (props) => {
     count: counts,
   };
 
-  console.log(pizzas[0]);
   return (
     <div className="cart__item">
       <div className="cart__item-img">
@@ -70,7 +87,7 @@ const CartPizza = (props) => {
       <div className="cart__item-count">
         {/* ------------------------------ */}
         <div
-          onClick={(data) => handlerDencrement(pizza)}
+          onClick={() => handlerDecrement()}
           className="button button--outline button--circle cart__item-count-minus"
         >
           <svg
@@ -92,7 +109,10 @@ const CartPizza = (props) => {
         </div>
         <b>{checkCountSelectedPizza}</b>
         {/* +++++++++++++++++ */}
-        <div className="button button--outline button--circle cart__item-count-plus">
+        <div
+          onClick={(data) => handlerIncrement(pizza)}
+          className="button button--outline button--circle cart__item-count-plus"
+        >
           <svg
             width="10"
             height="10"
@@ -114,7 +134,7 @@ const CartPizza = (props) => {
       <div className="cart__item-price">
         <b>{props.price} ₽</b>
       </div>
-      <div className="cart__item-remove">
+      <div onClick={() => handlerRemovePizza()} className="cart__item-remove">
         <div className="button button--outline button--circle">
           <svg
             width="10"

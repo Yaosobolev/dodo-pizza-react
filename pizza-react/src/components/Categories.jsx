@@ -1,9 +1,4 @@
-import { React, useState } from "react";
-
 const Categories = (props) => {
-  // const [active, setActive] = useState(0);
-  // const [active, setCategoriType] = useState(0);
-
   const categories = [
     "Все",
     "Мясные",
@@ -12,10 +7,6 @@ const Categories = (props) => {
     "Острые",
     "Закрытые",
   ];
-  const handlerActive = (index) => {
-    setActive(index);
-  };
-  // console.log();
   return (
     <div className="categories">
       <ul>

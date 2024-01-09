@@ -1,5 +1,4 @@
-import { React, useState, useEffect, useContext } from "react";
-import { useOutletContext } from "react-router";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 
@@ -11,7 +10,6 @@ import { Pagination } from "../components/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategotiType, setSelectPage } from "../redux/slices/filterSlice";
 import { setCountPages } from "../redux/slices/filterSlice";
-import { setPizzas } from "../redux/slices/pizzaSlice";
 
 import axios from "axios";
 
@@ -76,7 +74,6 @@ const Home = () => {
     });
     navigate(`?${querryString}`);
   }, [categotiType, sortType, selectPage]);
-  const pizzas = useSelector((state) => state.pizza.pizzas);
 
   return (
     <div className="container">
@@ -85,31 +82,18 @@ const Home = () => {
           categotiType={categotiType}
           setCategoriType={onClickCategoriType}
         />
-        <Sort sortType={sortType} setSortType={(id) => setSortType(id)} />
+        <Sort sortType={sortType} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
 
       <div className="content__items">
-        {
-          isLoading
-            ? [...new Array(8)].map((_, id) => {
-                return <Skeleton key={id} />;
-              })
-            : items.map((pizza, index) => {
-                return <PizzaBlock key={index} index={index} {...pizza} />;
-              }) /*items
-              .filter((item) => {
-                if (
-                  item.title.toLowerCase().includes(searchValue.toLowerCase())
-                ) {
-                  return true;
-                }
-                return false;
-              })
-              .map((pizza, id) => {
-                return <PizzaBlock key={id} {...pizza} />;
-              })*/
-        }
+        {isLoading
+          ? [...new Array(8)].map((_, id) => {
+              return <Skeleton key={id} />;
+            })
+          : items.map((pizza, index) => {
+              return <PizzaBlock key={index} index={index} {...pizza} />;
+            })}
       </div>
       <Pagination
         countPage={
