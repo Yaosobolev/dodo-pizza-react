@@ -1,16 +1,24 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CartPizza from "./CartPizza";
+import {
+  setRemovePizzas,
+  setUniqPizzas,
+  setAmount,
+} from "../../redux/slices/pizzaSlice";
 
 export const Cart = () => {
+  const dispatch = useDispatch();
+
   const pizzas = useSelector((state) => state.pizza.pizzas);
-  const countPizza = useSelector((state) => state.pizza.countPizza);
   const amount = useSelector((state) => state.pizza.amount);
   const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
-  // const totalPizza = useSelector((state) => state.pizza.totalPizza);
-  console.log(countPizza);
-  console.log(uniqPizzas);
+
+  const handlerRemovePizzas = () => {
+    dispatch(setRemovePizzas());
+    dispatch(setUniqPizzas());
+    dispatch(setAmount());
+  };
   return (
     <div className="container container--cart ">
       <div className="cart">
@@ -47,7 +55,8 @@ export const Cart = () => {
             </svg>
             Корзина
           </h2>
-          <div className="cart__clear">
+          {/* remove all pizzas */}
+          <div onClick={() => handlerRemovePizzas()} className="cart__clear">
             <svg
               width="20"
               height="20"

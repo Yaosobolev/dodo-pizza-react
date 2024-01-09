@@ -1,13 +1,10 @@
-import { React, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setCountPizzas,
-  setCountPizza,
   setPizzas,
   setUniqPizzas,
-  // setTotalPizz,
+  setAmount,
 } from "../../redux/slices/pizzaSlice";
-import { setAmount } from "../../redux/slices/pizzaSlice";
 
 const PizzaBlock = (props) => {
   const dispatch = useDispatch();
@@ -20,14 +17,9 @@ const PizzaBlock = (props) => {
   const sizeName = ["26", "30", "40"];
 
   const handlerPizza = (data) => {
-    // setPizzaCount(countPizzas);
     dispatch(setPizzas(data));
-    dispatch(setAmount(data.price));
+    dispatch(setAmount());
     dispatch(setUniqPizzas());
-    // dispatch(setCountPizza(pizzaCount + 1));
-    // dispatch(setCountPizzas({ id: data.id, count: counts }));
-    // dispatch(setTotalPizz());
-    // dispatch(setCount());
     setCount(counts + 1);
   };
 
@@ -44,9 +36,6 @@ const PizzaBlock = (props) => {
   const checkCountSelectedPizza = countSelectedPizza.filter(
     (item) => item !== undefined
   );
-
-  console.log(checkCountSelectedPizza);
-
   const [counts, setCount] = useState(1);
 
   useEffect(() => {
@@ -66,8 +55,6 @@ const PizzaBlock = (props) => {
     id: props.id,
     count: counts,
   };
-
-  // console.log(props.index);
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">

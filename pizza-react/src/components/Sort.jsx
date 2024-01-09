@@ -1,5 +1,4 @@
-import { React, useState } from "react";
-
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSortType } from "../redux/slices/filterSlice";
 
@@ -10,7 +9,6 @@ const Sort = () => {
   const sorts = ["популярности", "цене", "алфавиту"];
 
   const listItemHandle = (index) => {
-    // props.setSortType(index);
     dispath(setSortType(index));
     setOpen(false);
   };
@@ -39,13 +37,10 @@ const Sort = () => {
               return (
                 <li
                   key={index}
-                  // onClick={() => setSortActive(index)}
-                  // onClick={() => setOpen(false)}
                   onClick={() => listItemHandle(index)}
                   className={index === sortType ? "active" : ""}
                 >
                   {sort}
-                  {/* {console.log("a" + props.sortType)} */}
                 </li>
               );
             })}
