@@ -1,18 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIndex } from "../../redux/slices/pizzaSlice";
 import { setSelectedIndex } from "../../redux/slices/pizzaSlice";
+import { setUniqPizzas, setPizzas } from "../../redux/slices/pizzaSlice";
 
 const CartPizza = (props) => {
   const dispatch = useDispatch();
   const index = useSelector((state) => state.pizza.index);
+  const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
+  const pizzas = useSelector((state) => state.pizza.pizzas);
+
   useEffect(() => {
     dispatch(setIndex(props.index));
     dispatch(setSelectedIndex(index));
-    console.log(props.index);
+    // console.log(props.index);
   }, []);
-  console.log(index);
+  // console.log(index);
 
+  const countSelectedPizza = uniqPizzas.map((item) => {
+    if (
+      props.id === item.id &&
+      props.type === item.type &&
+      props.size === item.size
+    ) {
+      return item.count;
+    }
+  });
+
+  const checkCountSelectedPizza = countSelectedPizza.filter(
+    (item) => item !== undefined
+  );
+
+  const handlerDencrement = (data) => {
+    dispatch(setPizzas(data));
+    setCount(counts - 1);
+    // dispatch(setUniqPizzas());
+  };
+  const [counts, setCount] = useState(
+    Number(checkCountSelectedPizza)
+    // parseInt(checkCountSelectedPizza.join(""), 10)
+  );
+
+  useEffect(() => {
+    setCount(Number(checkCountSelectedPizza) - 1);
+  }, [counts]);
+
+  const pizza = {
+    imageUrl: props.imageUrl,
+    title: props.title,
+    size: props.size,
+    type: props.type,
+    price: props.price,
+    id: props.id,
+    count: counts,
+  };
+
+  console.log(pizzas[0]);
   return (
     <div className="cart__item">
       <div className="cart__item-img">
@@ -25,7 +68,11 @@ const CartPizza = (props) => {
         </p>
       </div>
       <div className="cart__item-count">
-        <div className="button button--outline button--circle cart__item-count-minus">
+        {/* ------------------------------ */}
+        <div
+          onClick={(data) => handlerDencrement(pizza)}
+          className="button button--outline button--circle cart__item-count-minus"
+        >
           <svg
             width="10"
             height="10"
@@ -43,7 +90,8 @@ const CartPizza = (props) => {
             ></path>
           </svg>
         </div>
-        <b>{props.count + 1}</b>
+        <b>{checkCountSelectedPizza}</b>
+        {/* +++++++++++++++++ */}
         <div className="button button--outline button--circle cart__item-count-plus">
           <svg
             width="10"

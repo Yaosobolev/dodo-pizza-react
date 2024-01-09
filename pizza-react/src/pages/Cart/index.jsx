@@ -5,9 +5,9 @@ import CartPizza from "./CartPizza";
 
 export const Cart = () => {
   const pizzas = useSelector((state) => state.pizza.pizzas);
+  const countPizza = useSelector((state) => state.pizza.countPizza);
   const amount = useSelector((state) => state.pizza.amount);
   const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
-  const countPizza = useSelector((state) => state.pizza.countPizza);
   // const totalPizza = useSelector((state) => state.pizza.totalPizza);
   console.log(countPizza);
   console.log(uniqPizzas);
