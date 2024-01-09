@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setCountPizzas,
@@ -12,29 +12,51 @@ import { setAmount } from "../../redux/slices/pizzaSlice";
 const PizzaBlock = (props) => {
   const dispatch = useDispatch();
 
-  // console.log(pizzas);
-  // console.log(props.title);
-  const [pizzaCount, setPizzaCount] = useState(0);
   const [sizeActive, setSizeActive] = useState(0);
   const [typeActive, setTypeActive] = useState(0);
   const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
-  const countPizza = useSelector((state) => state.pizza.countPizza);
-  const countPizzas = useSelector((state) => state.pizza.countPizzas);
-  console.log(uniqPizzas);
 
   const typeName = ["тонкое", "традиционное", "толстое"];
   const sizeName = ["26", "30", "40"];
 
   const handlerPizza = (data) => {
-    setPizzaCount(countPizzas);
+    // setPizzaCount(countPizzas);
     dispatch(setPizzas(data));
     dispatch(setAmount(data.price));
     dispatch(setUniqPizzas());
-    dispatch(setCountPizza(pizzaCount + 1));
-    dispatch(setCountPizzas());
+    // dispatch(setCountPizza(pizzaCount + 1));
+    // dispatch(setCountPizzas({ id: data.id, count: counts }));
     // dispatch(setTotalPizz());
+    // dispatch(setCount());
+    setCount(counts + 1);
   };
-  // console.log(pizzaCount);
+
+  const countSelectedPizza = uniqPizzas.map((item) => {
+    if (
+      props.id === item.id &&
+      typeName[typeActive] === item.type &&
+      sizeName[sizeActive] === item.size
+    ) {
+      return item.count;
+    }
+  });
+
+  const checkCountSelectedPizza = countSelectedPizza.filter(
+    (item) => item !== undefined
+  );
+
+  console.log(checkCountSelectedPizza);
+
+  const [counts, setCount] = useState(1);
+
+  useEffect(() => {
+    setCount(
+      checkCountSelectedPizza.length !== 0
+        ? Number(checkCountSelectedPizza) + 1
+        : 1
+    );
+  }, [sizeName, typeName]);
+
   const pizza = {
     imageUrl: props.imageUrl,
     title: props.title,
@@ -42,10 +64,10 @@ const PizzaBlock = (props) => {
     type: typeName[typeActive],
     price: props.price,
     id: props.id,
-    count: pizzaCount,
+    count: counts,
   };
 
-  console.log(props.index);
+  // console.log(props.index);
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
@@ -98,7 +120,11 @@ const PizzaBlock = (props) => {
               />
             </svg>
             <span>Добавить</span>
-            <i>{pizzaCount > 0 ? pizza.count : pizzaCount}</i>
+            <i>
+              {checkCountSelectedPizza.length !== 0
+                ? Number(checkCountSelectedPizza)
+                : 0}
+            </i>
           </button>
         </div>
       </div>

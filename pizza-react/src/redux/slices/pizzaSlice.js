@@ -6,7 +6,7 @@ const initialState = {
   amount: 0,
   uniqPizzas: [],
   sortPizzas: [],
-  countPizzas: 0,
+
   countPizza: 0,
   index: [],
   selectedIndex: [],
@@ -32,10 +32,10 @@ const pizzaSlice = createSlice({
           item1.type === item2.type
         );
       });
+
+      // state.uniqPizzas.push(action.payload);
     },
-    setCountPizzas: (state) => {
-      state.countPizzas += 1;
-    },
+
     setCountPizza: (state, action) => {
       state.countPizza = action.payload;
     },
