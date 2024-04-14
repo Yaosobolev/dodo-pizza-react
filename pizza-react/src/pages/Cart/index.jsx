@@ -5,14 +5,13 @@ import {
   setRemovePizzas,
   setUniqPizzas,
   setAmount,
-} from "../../redux/slices/pizzaSlice";
+  selectCart,
+} from "../../redux/slices/cartSlice";
 
 export const Cart = () => {
   const dispatch = useDispatch();
 
-  const pizzas = useSelector((state) => state.pizza.pizzas);
-  const amount = useSelector((state) => state.pizza.amount);
-  const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
+  const { pizzas, amount, uniqPizzas } = useSelector(selectCart);
 
   const handlerRemovePizzas = () => {
     dispatch(setRemovePizzas());

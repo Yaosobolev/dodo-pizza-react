@@ -6,11 +6,12 @@ import {
   setDecrementPizza,
   setAmount,
   setRemovePizza,
-} from "../../redux/slices/pizzaSlice";
+  selectCart,
+} from "../../redux/slices/cartSlice";
 
 const CartPizza = (props) => {
   const dispatch = useDispatch();
-  const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
+  const { uniqPizzas } = useSelector(selectCart);
 
   const countSelectedPizza = uniqPizzas.map((item) => {
     if (

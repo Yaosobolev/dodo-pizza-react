@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 
@@ -8,20 +8,19 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { Pagination } from "../components/Pagination";
 import { useDispatch, useSelector } from "react-redux";
-import { setCategotiType, setSelectPage } from "../redux/slices/filterSlice";
-import { setCountPages } from "../redux/slices/filterSlice";
-
-import axios from "axios";
+import {
+  setCategotiType,
+  setSelectPage,
+  selectFilter,
+  fetchCountPage,
+} from "../redux/slices/filterSlice";
+import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { categotiType, sortType, countPages, selectPage, searchValue } =
+    useSelector(selectFilter);
 
-  const categotiType = useSelector((state) => state.filter.categotiType);
-  const sortType = useSelector((state) => state.filter.sortType);
-  const countPages = useSelector((state) => state.filter.countPages);
-  const selectPage = useSelector((state) => state.filter.selectPage);
-  const searchValue = useSelector((state) => state.filter.searchValue);
+  const { Items, status } = useSelector(selectPizza);
 
   const dispath = useDispatch();
   const navigate = useNavigate();
@@ -29,47 +28,39 @@ const Home = () => {
   const onClickCategoriType = (id) => {
     dispath(setCategotiType(id));
   };
-  // console.log(searchValue);
   const handleSearch = searchValue ? `&search=${searchValue}` : "";
-  const Sortw = (index) => {
-    if (index === 0) return "rating";
-    else if (index === 1) return "price";
-    else return "title";
+  const getSortField = (index) =>
+    ["rating", "price", "title"][index] || "title";
+
+  const getPizza = async (pagination) => {
+    dispath(
+      fetchPizzas({
+        selectPage,
+        categotiType,
+        sortType,
+        handleSearch,
+      })
+    );
+    window.scrollTo(0, 0);
+    pagination && dispath(setSelectPage(1));
   };
-  const coutPageUrl = `https://65341c62e1b6f4c5904691be.mockapi.io/items?`;
+
   useEffect(() => {
-    axios.get(coutPageUrl).then((res) => dispath(setCountPages(res.data)));
+    dispath(fetchCountPage());
   }, []);
 
-  const pizza = `https://65341c62e1b6f4c5904691be.mockapi.io/items?&page=${selectPage}&limit=4&${
-    categotiType > 0 ? `category=${categotiType}` : ""
-  }&sortBy=${Sortw(sortType)}&order=desc${handleSearch}`;
-
   useEffect(() => {
-    setIsLoading(true);
-    axios.get(pizza).then((res) => {
-      setItems(res.data);
-      setIsLoading(false);
-      window.scrollTo(0, 0);
-      // setNumberPage(1);
-      dispath(setSelectPage(1));
-    });
+    getPizza(true);
   }, [categotiType, sortType, searchValue]);
 
   useEffect(() => {
-    setIsLoading(true);
-
-    axios.get(pizza).then((res) => {
-      setItems(res.data);
-      setIsLoading(false);
-      window.scrollTo(0, 0);
-    });
+    getPizza(false);
   }, [selectPage]);
 
   useEffect(() => {
     const querryString = qs.stringify({
       categotiType,
-      sortType: Sortw(sortType),
+      sortType: getSortField(sortType),
       selectPage,
     });
     navigate(`?${querryString}`);
@@ -85,16 +76,27 @@ const Home = () => {
         <Sort sortType={sortType} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
+      {status === "error" ? (
+        <div className="content__error-info">
+          <h2>Произошла ошибка</h2>
+          <p>Не удается показать вам наши пиццы</p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status == "loading"
+            ? [...new Array(8)].map((_, id) => {
+                return <Skeleton key={id} />;
+              })
+            : Items.map((pizza, index) => {
+                return (
+                  // <Link to={`/pizza/${pizza.id}`} key={index}>
+                  <PizzaBlock {...pizza} key={index} />
+                  // </Link>
+                );
+              })}
+        </div>
+      )}
 
-      <div className="content__items">
-        {isLoading
-          ? [...new Array(8)].map((_, id) => {
-              return <Skeleton key={id} />;
-            })
-          : items.map((pizza, index) => {
-              return <PizzaBlock key={index} index={index} {...pizza} />;
-            })}
-      </div>
       <Pagination
         countPage={
           countPages.length % 4 === 0

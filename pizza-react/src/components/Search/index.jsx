@@ -27,7 +27,7 @@ export const Search = () => {
   const inputRef = useRef();
 
   const onClickClear = () => {
-    setSearchValue("");
+    dispatch(setSearchValue(""));
     setValue("");
     inputRef.current.focus();
   };

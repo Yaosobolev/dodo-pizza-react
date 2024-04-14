@@ -6,6 +6,7 @@ import Home from "./pages/Home.jsx";
 import App from "./App.jsx";
 import { NotFound } from "./pages/NotFound.jsx";
 import { Cart } from "./pages/Cart";
+import FullPizza from "./pages/FullPizza.jsx";
 
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/pizza/:id",
+        element: <FullPizza />,
       },
     ],
   },

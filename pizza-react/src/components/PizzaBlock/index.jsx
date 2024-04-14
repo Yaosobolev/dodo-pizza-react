@@ -4,14 +4,16 @@ import {
   setPizzas,
   setUniqPizzas,
   setAmount,
-} from "../../redux/slices/pizzaSlice";
+  selectCart,
+} from "../../redux/slices/cartSlice";
+import { Link } from "react-router-dom";
 
 const PizzaBlock = (props) => {
   const dispatch = useDispatch();
 
   const [sizeActive, setSizeActive] = useState(0);
   const [typeActive, setTypeActive] = useState(0);
-  const uniqPizzas = useSelector((state) => state.pizza.uniqPizzas);
+  const { uniqPizzas } = useSelector(selectCart);
 
   const typeName = ["тонкое", "традиционное", "толстое"];
   const sizeName = ["26", "30", "40"];
@@ -58,7 +60,13 @@ const PizzaBlock = (props) => {
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
-        <img className="pizza-block__image" src={props.imageUrl} alt="Pizza" />
+        <Link to={`/pizza/${props.id}`}>
+          <img
+            className="pizza-block__image"
+            src={props.imageUrl}
+            alt="Pizza"
+          />
+        </Link>
         <h4 className="pizza-block__title">{props.title}</h4>
         <div className="pizza-block__selector">
           <ul>

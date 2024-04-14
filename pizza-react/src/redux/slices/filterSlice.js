@@ -1,4 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+export const fetchCountPage = createAsyncThunk(
+  "filter/fetchCountPageStatus",
+  async () => {
+    const coutPageUrl = `https://65341c62e1b6f4c5904691be.mockapi.io/items?`;
+    const { data } = await axios.get(coutPageUrl);
+
+    return data;
+  }
+);
 
 const initialState = {
   categotiType: 0,
@@ -28,7 +39,21 @@ const filterSlice = createSlice({
       state.searchValue = action.payload;
     },
   },
+
+  extraReducers(builder) {
+    builder.addCase(fetchCountPage.pending, (state) => {
+      state.countPages = [];
+    });
+    builder.addCase(fetchCountPage.fulfilled, (state, action) => {
+      state.countPages = action.payload;
+    });
+    builder.addCase(fetchCountPage.rejected, (state) => {
+      state.countPages = [];
+    });
+  },
 });
+
+export const selectFilter = (state) => state.filter;
 
 export const {
   setCategotiType,

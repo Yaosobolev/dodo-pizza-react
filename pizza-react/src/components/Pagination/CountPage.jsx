@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectPage } from "../../redux/slices/filterSlice";
+import { selectFilter, setSelectPage } from "../../redux/slices/filterSlice";
 
 import style from "./CountPage.module.scss";
 
 export const CountPage = (props) => {
-  const selectPage = useSelector((state) => state.filter.selectPage);
+  const { selectPage } = useSelector(selectFilter);
   const dispatch = useDispatch();
 
   const CountPageHandler = (index) => {
