@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-type Pizza = {
+type PizzaType = {
   imageUrl: string;
   title: string;
   price: number;
@@ -10,13 +10,13 @@ type Pizza = {
 
 const FullPizza: React.FC = () => {
   const { id } = useParams();
-  const [pizza, setPizza] = useState<Pizza>({
+  const [pizza, setPizza] = useState<PizzaType>({
     imageUrl: "",
     title: "",
     price: 0,
   });
 
-  const getPizza = async () => {
+  const getPizza = async (): Promise<void> => {
     const { data } = await axios.get(
       `https://65341c62e1b6f4c5904691be.mockapi.io/items/${id}`
     );
@@ -29,7 +29,6 @@ const FullPizza: React.FC = () => {
       console.error(error);
     }
   }, []);
-  console.log(pizza);
 
   return (
     <>

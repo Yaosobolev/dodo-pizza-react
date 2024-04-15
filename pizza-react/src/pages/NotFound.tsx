@@ -3,7 +3,7 @@ import Header from "../components/Header";
 
 import "../scss/app.scss";
 
-export const NotFound = () => {
+export const NotFound: React.FC = () => {
   return (
     <>
       <div className="wrapper">

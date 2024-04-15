@@ -16,7 +16,7 @@ import {
 } from "../redux/slices/filterSlice";
 import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice";
 
-const Home = () => {
+const Home: React.FC = () => {
   const { categotiType, sortType, countPages, selectPage, searchValue } =
     useSelector(selectFilter);
 
@@ -25,15 +25,17 @@ const Home = () => {
   const dispath = useDispatch();
   const navigate = useNavigate();
 
-  const onClickCategoriType = (id) => {
+  const onClickCategoriType = (id: number): void => {
     dispath(setCategotiType(id));
   };
   const handleSearch = searchValue ? `&search=${searchValue}` : "";
-  const getSortField = (index) =>
+  const getSortField = (index: number): string =>
     ["rating", "price", "title"][index] || "title";
 
-  const getPizza = async (pagination) => {
+  const getPizza = async (pagination: boolean): Promise<void> => {
     dispath(
+      // @ts-ignore
+
       fetchPizzas({
         selectPage,
         categotiType,
@@ -46,7 +48,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    dispath(fetchCountPage());
+    dispath(
+      // @ts-ignore
+      fetchCountPage()
+    );
   }, []);
 
   useEffect(() => {
@@ -73,7 +78,7 @@ const Home = () => {
           categotiType={categotiType}
           setCategoriType={onClickCategoriType}
         />
-        <Sort sortType={sortType} />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === "error" ? (
@@ -87,23 +92,13 @@ const Home = () => {
             ? [...new Array(8)].map((_, id) => {
                 return <Skeleton key={id} />;
               })
-            : Items.map((pizza, index) => {
-                return (
-                  // <Link to={`/pizza/${pizza.id}`} key={index}>
-                  <PizzaBlock {...pizza} key={index} />
-                  // </Link>
-                );
+            : Items.map((pizza: any, index: number) => {
+                return <PizzaBlock {...pizza} key={index} />;
               })}
         </div>
       )}
 
-      <Pagination
-        countPage={
-          countPages.length % 4 === 0
-            ? countPages.length / 4
-            : countPages.length / 4 + 0.5
-        }
-      />
+      <Pagination countPage={Math.ceil(countPages.length / 4)} />
     </div>
   );
 };

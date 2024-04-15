@@ -8,7 +8,7 @@ const Sort: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const sorts: string[] = ["популярности", "цене", "алфавиту"];
 
-  const listItemHandle = (index: number) => {
+  const listItemHandle = (index: number): void => {
     dispath(setSortType(index));
     setOpen(false);
   };

@@ -26,6 +26,8 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9",
+    "@types/qs": "^6.9.14",
     "@types/react": "^18.2.78",
     "@types/react-dom": "^18.2.25",
     "@vitejs/plugin-react": "^4.0.3",

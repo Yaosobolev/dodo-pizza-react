@@ -1,10 +1,10 @@
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import Home from "./pages/Home.jsx";
+import Home from "./pages/Home";
 import App from "./App";
-import { NotFound } from "./pages/NotFound.jsx";
-import { Cart } from "./pages/Cart/index.jsx";
+import { NotFound } from "./pages/NotFound";
+import { Cart } from "./pages/Cart/index";
 import FullPizza from "./pages/FullPizza";
 
 import { store } from "./redux/store.js";

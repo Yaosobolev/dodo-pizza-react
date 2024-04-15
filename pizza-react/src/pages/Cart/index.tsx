@@ -11,12 +11,12 @@ import {
   selectCart,
 } from "../../redux/slices/cartSlice";
 
-export const Cart = () => {
+export const Cart: React.FC = () => {
   const dispatch = useDispatch();
 
   const { pizzas, amount, uniqPizzas } = useSelector(selectCart);
 
-  const handlerRemovePizzas = () => {
+  const handlerRemovePizzas = (): void => {
     dispatch(setRemovePizzas());
     dispatch(setUniqPizzas());
     dispatch(setAmount());
@@ -104,7 +104,7 @@ export const Cart = () => {
           </div>
         </div>
         <div className="content__items">
-          {uniqPizzas.map((pizza, index) => {
+          {uniqPizzas.map((pizza: any, index: number) => {
             return <CartPizza key={index} index={index} {...pizza} />;
           })}
         </div>

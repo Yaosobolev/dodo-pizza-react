@@ -8,26 +8,55 @@ import {
 } from "../../redux/slices/cartSlice";
 import { Link } from "react-router-dom";
 
-const PizzaBlock = (props) => {
+type PizzaBlockProps = {
+  id: number;
+  imageUrl: string;
+  title: string;
+  price: number;
+  types: number[];
+  sizes: number[];
+  count: number;
+};
+
+type Pizza = {
+  id: number;
+  imageUrl: string;
+  title: string;
+  price: number;
+  type: string;
+  size: string;
+  count: number;
+};
+
+const PizzaBlock: React.FC<PizzaBlockProps> = ({
+  id,
+  imageUrl,
+  title,
+  price,
+  types,
+  sizes,
+}) => {
   const dispatch = useDispatch();
 
-  const [sizeActive, setSizeActive] = useState(0);
-  const [typeActive, setTypeActive] = useState(0);
+  const [sizeActive, setSizeActive] = useState<number>(0);
+  const [typeActive, setTypeActive] = useState<number>(0);
+  const [counts, setCount] = useState<number>(1);
+
   const { uniqPizzas } = useSelector(selectCart);
 
   const typeName = ["тонкое", "традиционное", "толстое"];
   const sizeName = ["26", "30", "40"];
 
-  const handlerPizza = (data) => {
+  const handlerPizza = (data: Pizza): void => {
     dispatch(setPizzas(data));
     dispatch(setAmount());
     dispatch(setUniqPizzas());
     setCount(counts + 1);
   };
 
-  const countSelectedPizza = uniqPizzas.map((item) => {
+  const countSelectedPizza = uniqPizzas.map((item: Pizza) => {
     if (
-      props.id === item.id &&
+      id === item.id &&
       typeName[typeActive] === item.type &&
       sizeName[sizeActive] === item.size
     ) {
@@ -36,9 +65,8 @@ const PizzaBlock = (props) => {
   });
 
   const checkCountSelectedPizza = countSelectedPizza.filter(
-    (item) => item !== undefined
+    (item: Pizza) => item !== undefined
   );
-  const [counts, setCount] = useState(1);
 
   useEffect(() => {
     setCount(
@@ -49,28 +77,24 @@ const PizzaBlock = (props) => {
   }, [sizeName, typeName]);
 
   const pizza = {
-    imageUrl: props.imageUrl,
-    title: props.title,
+    imageUrl: imageUrl,
+    title: title,
     size: sizeName[sizeActive],
     type: typeName[typeActive],
-    price: props.price,
-    id: props.id,
+    price: price,
+    id: id,
     count: counts,
   };
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
-        <Link to={`/pizza/${props.id}`}>
-          <img
-            className="pizza-block__image"
-            src={props.imageUrl}
-            alt="Pizza"
-          />
+        <Link to={`/pizza/${id}`}>
+          <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
         </Link>
-        <h4 className="pizza-block__title">{props.title}</h4>
+        <h4 className="pizza-block__title">{title}</h4>
         <div className="pizza-block__selector">
           <ul>
-            {props.types.map((type) => {
+            {types.map((type) => {
               return (
                 <li
                   key={type}
@@ -83,7 +107,7 @@ const PizzaBlock = (props) => {
             })}
           </ul>
           <ul>
-            {props.sizes.map((size, index) => {
+            {sizes.map((size, index) => {
               return (
                 <li
                   onClick={() => setSizeActive(index)}
@@ -97,9 +121,9 @@ const PizzaBlock = (props) => {
           </ul>
         </div>
         <div className="pizza-block__bottom">
-          <div className="pizza-block__price">от {props.price} ₽</div>
+          <div className="pizza-block__price">от {price} ₽</div>
           <button
-            onClick={(data) => handlerPizza(pizza)}
+            onClick={() => handlerPizza(pizza)}
             className="button button--outline button--add"
           >
             <svg

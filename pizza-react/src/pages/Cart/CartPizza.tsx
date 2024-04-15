@@ -32,47 +32,44 @@ const CartPizza: React.FC<CartPizzaProps> = ({
   const dispatch = useDispatch();
   const { uniqPizzas } = useSelector(selectCart);
 
-  const countSelectedPizza: CountSelectedPizza[] = uniqPizzas.map(
-    (item: CartPizzaProps) => {
-      if (id === item.id && type === item.type && size === item.size) {
-        return item.count;
-      }
+  const countSelectedPizza = uniqPizzas.map((item: CartPizzaProps) => {
+    if (id === item.id && type === item.type && size === item.size) {
+      return item.count;
     }
-  );
-  const nameSelectedPizza: CartPizzaProps[] = uniqPizzas.map(
-    (item: CartPizzaProps) => {
-      if (title === item.title && type === item.type && size === item.size) {
-        return item;
-      }
+  });
+  const nameSelectedPizza = uniqPizzas.map((item: CartPizzaProps) => {
+    if (title === item.title && type === item.type && size === item.size) {
+      return item;
     }
+  });
+
+  const checkCountSelectedPizza = countSelectedPizza.filter(
+    (item: CountSelectedPizza) => item !== undefined
   );
 
-  const checkCountSelectedPizza: CountSelectedPizza[] =
-    countSelectedPizza.filter((item: CountSelectedPizza) => item !== undefined);
-
-  const checkNameSelectedPizza: CartPizzaProps[] = nameSelectedPizza.filter(
+  const checkNameSelectedPizza = nameSelectedPizza.filter(
     (item: CartPizzaProps) => item !== undefined
   );
+  const [counts, setCount] = useState<number>(Number(checkCountSelectedPizza));
 
   const handlerIncrement = (data: CartPizzaProps) => {
     setCount(counts + 1);
     dispatch(setPizzas(data));
     dispatch(setUniqPizzas());
   };
-  const [counts, setCount] = useState(Number(checkCountSelectedPizza));
 
   useEffect(() => {
     setCount(Number(checkCountSelectedPizza) + 1);
     dispatch(setAmount());
   }, [checkCountSelectedPizza]);
 
-  const handlerDecrement = () => {
+  const handlerDecrement = (): void => {
     dispatch(setDecrementPizza(checkNameSelectedPizza));
     dispatch(setUniqPizzas());
     dispatch(setAmount());
   };
 
-  const handlerRemovePizza = () => {
+  const handlerRemovePizza = (): void => {
     dispatch(setRemovePizza(checkNameSelectedPizza));
     dispatch(setUniqPizzas());
     dispatch(setAmount());
@@ -125,7 +122,7 @@ const CartPizza: React.FC<CartPizzaProps> = ({
         <b>{checkCountSelectedPizza}</b>
         {/* +++++++++++++++++ */}
         <div
-          onClick={(data) => handlerIncrement(pizza)}
+          onClick={() => handlerIncrement(pizza)}
           className="button button--outline button--circle cart__item-count-plus"
         >
           <svg

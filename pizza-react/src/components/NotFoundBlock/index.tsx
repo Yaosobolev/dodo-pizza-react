@@ -1,6 +1,6 @@
 import style from "./NotFoundBlock.module.scss";
 
-export const NotFoundBlock = () => {
+export const NotFoundBlock: React.FC = () => {
   return (
     <div className={style.root}>
       <span>:)</span>

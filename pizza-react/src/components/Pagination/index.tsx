@@ -1,8 +1,12 @@
 import style from "./Pagination.module.scss";
 import { CountPage } from "./CountPage";
 
-export const Pagination = (props) => {
-  const array = new Array(props.countPage).fill().map((_, i) => {
+type PaginationProps = {
+  countPage: number;
+};
+
+export const Pagination: React.FC<PaginationProps> = ({ countPage }) => {
+  const array = new Array(countPage).fill(null).map((_, i) => {
     return i + 1;
   });
 
