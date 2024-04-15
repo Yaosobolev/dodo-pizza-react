@@ -3,13 +3,13 @@ import { BsSearch } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 
 import style from "./Search.module.scss";
-import { useDispatch } from "react-redux";
 import { setSearchValue } from "../../redux/slices/filterSlice";
 
 import debounce from "lodash.debounce";
+import { useAppDispatch } from "../../redux/store";
 
 export const Search: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [value, setValue] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);

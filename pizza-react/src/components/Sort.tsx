@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectFilter, setSortType } from "../redux/slices/filterSlice";
+import { useAppDispatch } from "../redux/store";
 
 const Sort: React.FC = () => {
-  const dispath = useDispatch();
+  const dispath = useAppDispatch();
   const { sortType } = useSelector(selectFilter);
   const [open, setOpen] = useState<boolean>(false);
   const sorts: string[] = ["популярности", "цене", "алфавиту"];

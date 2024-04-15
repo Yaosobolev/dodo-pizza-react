@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   setPizzas,
   setUniqPizzas,
@@ -7,9 +7,10 @@ import {
   selectCart,
 } from "../../redux/slices/cartSlice";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../../redux/store";
 
 type PizzaBlockProps = {
-  id: number;
+  id: string;
   imageUrl: string;
   title: string;
   price: number;
@@ -19,7 +20,7 @@ type PizzaBlockProps = {
 };
 
 type Pizza = {
-  id: number;
+  id: string;
   imageUrl: string;
   title: string;
   price: number;
@@ -27,6 +28,8 @@ type Pizza = {
   size: string;
   count: number;
 };
+
+type CountSelectedPizza = number | undefined;
 
 const PizzaBlock: React.FC<PizzaBlockProps> = ({
   id,
@@ -36,7 +39,7 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
   types,
   sizes,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [sizeActive, setSizeActive] = useState<number>(0);
   const [typeActive, setTypeActive] = useState<number>(0);
@@ -65,7 +68,7 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
   });
 
   const checkCountSelectedPizza = countSelectedPizza.filter(
-    (item: Pizza) => item !== undefined
+    (item: CountSelectedPizza) => item !== undefined
   );
 
   useEffect(() => {

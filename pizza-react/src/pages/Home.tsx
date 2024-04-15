@@ -7,7 +7,7 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { Pagination } from "../components/Pagination";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   setCategotiType,
   setSelectPage,
@@ -15,6 +15,7 @@ import {
   fetchCountPage,
 } from "../redux/slices/filterSlice";
 import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice";
+import { useAppDispatch } from "../redux/store";
 
 const Home: React.FC = () => {
   const { categotiType, sortType, countPages, selectPage, searchValue } =
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
 
   const { Items, status } = useSelector(selectPizza);
 
-  const dispath = useDispatch();
+  const dispath = useAppDispatch();
   const navigate = useNavigate();
 
   const onClickCategoriType = (id: number): void => {
@@ -34,8 +35,6 @@ const Home: React.FC = () => {
 
   const getPizza = async (pagination: boolean): Promise<void> => {
     dispath(
-      // @ts-ignore
-
       fetchPizzas({
         selectPage,
         categotiType,
@@ -48,10 +47,7 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    dispath(
-      // @ts-ignore
-      fetchCountPage()
-    );
+    dispath(fetchCountPage());
   }, []);
 
   useEffect(() => {
@@ -98,7 +94,7 @@ const Home: React.FC = () => {
         </div>
       )}
 
-      <Pagination countPage={Math.ceil(countPages.length / 4)} />
+      <Pagination countPage={Math.ceil(countPages / 4)} />
     </div>
   );
 };

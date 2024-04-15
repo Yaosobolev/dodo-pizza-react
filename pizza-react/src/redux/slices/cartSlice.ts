@@ -1,31 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import unick, { isEqual } from "lodash";
 
 import cloneDeep from "lodash/cloneDeep";
+import { RootState } from "../store";
 
-const initialState = {
+type CartPizza = {
+  id: string;
+  imageUrl: string;
+  title: string;
+  price: number;
+  type: string;
+  size: string;
+  count: number;
+};
+
+interface CartSliceState {
+  pizzas: CartPizza[];
+  amount: number;
+  uniqPizzas: CartPizza[];
+  sortPizzas: CartPizza[];
+}
+
+const initialState: CartSliceState = {
   pizzas: [],
   amount: 0,
   uniqPizzas: [],
   sortPizzas: [],
-
-  countPizza: 0,
-  index: [],
-  selectedIndex: [],
-
-  reversedData: [],
-  filteredData: [],
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    setPizzas: (state, action) => {
+    setPizzas: (state, action: PayloadAction<CartPizza>) => {
       state.pizzas.push(action.payload);
     },
     setAmount: (state) => {
-      // state.amount += action.payload;
       state.amount = state.pizzas.reduce((sum, item) => {
         return sum + item.price;
       }, 0);
@@ -40,21 +50,9 @@ const cartSlice = createSlice({
           item1.type === item2.type
         );
       });
-
-      // state.uniqPizzas.push(action.payload);
     },
 
-    setCountPizza: (state, action) => {
-      state.countPizza = action.payload;
-    },
-    setIndex: (state, action) => {
-      state.index.push(action.payload);
-    },
-    setSelectedIndex: (state) => {
-      state.selectedIndex = unick.uniqWith(state.index, isEqual);
-    },
-
-    setDecrementPizza: (state, action) => {
+    setDecrementPizza: (state, action: PayloadAction<CartPizza[]>) => {
       const curPizza = action.payload;
       const reversedData = cloneDeep(state.pizzas).reverse();
       let removed = false;
@@ -74,7 +72,7 @@ const cartSlice = createSlice({
 
       state.pizzas = filteredData.reverse();
     },
-    setRemovePizza: (state, action) => {
+    setRemovePizza: (state, action: PayloadAction<CartPizza[]>) => {
       const curPizza = action.payload;
       const reversedData = cloneDeep(state.pizzas).reverse();
 
@@ -93,16 +91,13 @@ const cartSlice = createSlice({
   },
 });
 
-export const selectCart = (state) => state.cart;
+export const selectCart = (state: RootState) => state.cart;
 
 export const {
   setPizzas,
   setAmount,
   setUniqPizzas,
-  setCountPizzas,
-  setCountPizza,
-  setIndex,
-  setSelectedIndex,
+
   setDecrementPizza,
   setRemovePizza,
   setRemovePizzas,
