@@ -9,38 +9,52 @@ import {
   selectCart,
 } from "../../redux/slices/cartSlice";
 
-const CartPizza = (props) => {
+type CartPizzaProps = {
+  id: string;
+  type: string;
+  size: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  count: number;
+};
+
+type CountSelectedPizza = number | undefined;
+
+const CartPizza: React.FC<CartPizzaProps> = ({
+  id,
+  type,
+  size,
+  title,
+  price,
+  imageUrl,
+}) => {
   const dispatch = useDispatch();
   const { uniqPizzas } = useSelector(selectCart);
 
-  const countSelectedPizza = uniqPizzas.map((item) => {
-    if (
-      props.id === item.id &&
-      props.type === item.type &&
-      props.size === item.size
-    ) {
-      return item.count;
+  const countSelectedPizza: CountSelectedPizza[] = uniqPizzas.map(
+    (item: CartPizzaProps) => {
+      if (id === item.id && type === item.type && size === item.size) {
+        return item.count;
+      }
     }
-  });
-  const nameSelectedPizza = uniqPizzas.map((item) => {
-    if (
-      props.title === item.title &&
-      props.type === item.type &&
-      props.size === item.size
-    ) {
-      return item;
+  );
+  const nameSelectedPizza: CartPizzaProps[] = uniqPizzas.map(
+    (item: CartPizzaProps) => {
+      if (title === item.title && type === item.type && size === item.size) {
+        return item;
+      }
     }
-  });
-
-  const checkCountSelectedPizza = countSelectedPizza.filter(
-    (item) => item !== undefined
   );
 
-  const checkNameSelectedPizza = nameSelectedPizza.filter(
-    (item) => item !== undefined
+  const checkCountSelectedPizza: CountSelectedPizza[] =
+    countSelectedPizza.filter((item: CountSelectedPizza) => item !== undefined);
+
+  const checkNameSelectedPizza: CartPizzaProps[] = nameSelectedPizza.filter(
+    (item: CartPizzaProps) => item !== undefined
   );
 
-  const handlerIncrement = (data) => {
+  const handlerIncrement = (data: CartPizzaProps) => {
     setCount(counts + 1);
     dispatch(setPizzas(data));
     dispatch(setUniqPizzas());
@@ -65,24 +79,24 @@ const CartPizza = (props) => {
   };
 
   const pizza = {
-    imageUrl: props.imageUrl,
-    title: props.title,
-    size: props.size,
-    type: props.type,
-    price: props.price,
-    id: props.id,
+    imageUrl: imageUrl,
+    title: title,
+    size: size,
+    type: type,
+    price: price,
+    id: id,
     count: counts,
   };
 
   return (
     <div className="cart__item">
       <div className="cart__item-img">
-        <img className="pizza-block__image" src={props.imageUrl} alt="Pizza" />
+        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
       </div>
       <div className="cart__item-info">
-        <h3>{props.title}</h3>
+        <h3>{title}</h3>
         <p>
-          {props.type} тесто, {props.size} см.
+          {type} тесто, {size} см.
         </p>
       </div>
       <div className="cart__item-count">
@@ -133,7 +147,7 @@ const CartPizza = (props) => {
         </div>
       </div>
       <div className="cart__item-price">
-        <b>{props.price} ₽</b>
+        <b>{price} ₽</b>
       </div>
       <div onClick={() => handlerRemovePizza()} className="cart__item-remove">
         <div className="button button--outline button--circle">

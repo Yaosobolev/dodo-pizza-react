@@ -1,14 +1,13 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./pages/Home.jsx";
-import App from "./App.jsx";
+import App from "./App";
 import { NotFound } from "./pages/NotFound.jsx";
-import { Cart } from "./pages/Cart";
-import FullPizza from "./pages/FullPizza.jsx";
+import { Cart } from "./pages/Cart/index.jsx";
+import FullPizza from "./pages/FullPizza";
 
-import { store } from "./redux/store";
+import { store } from "./redux/store.js";
 import { Provider } from "react-redux";
 import "./index.css";
 
@@ -34,10 +33,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+const rootElem = document.getElementById("root");
+if (rootElem) {
+  const root = ReactDOM.createRoot(rootElem);
+
+  root.render(
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>
-);
+  );
+}

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CartPizza from "./CartPizza";
+import CartEmpty from "./CartEmpty";
+
+// import CartEmpty from "./CartEmpty";
 import {
   setRemovePizzas,
   setUniqPizzas,
@@ -18,6 +21,10 @@ export const Cart = () => {
     dispatch(setUniqPizzas());
     dispatch(setAmount());
   };
+
+  if (!amount) {
+    return <CartEmpty />;
+  }
   return (
     <div className="container container--cart ">
       <div className="cart">

@@ -78,8 +78,6 @@ const cartSlice = createSlice({
       const curPizza = action.payload;
       const reversedData = cloneDeep(state.pizzas).reverse();
 
-      console.log(reversedData);
-
       const filteredData = reversedData.filter(
         (item) =>
           item.title !== curPizza[0].title ||

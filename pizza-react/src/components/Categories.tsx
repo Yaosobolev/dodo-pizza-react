@@ -1,5 +1,13 @@
-const Categories = (props) => {
-  const categories = [
+type CategoriesProps = {
+  categotiType: number;
+  setCategoriType: any;
+};
+
+const Categories: React.FC<CategoriesProps> = ({
+  categotiType,
+  setCategoriType,
+}) => {
+  const categories: string[] = [
     "Все",
     "Мясные",
     "Вегетарианская",
@@ -13,12 +21,11 @@ const Categories = (props) => {
         {categories.map((categori, id) => {
           return (
             <li
-              onClick={() => props.setCategoriType(id)}
-              className={props.categotiType === id ? "active" : ""}
+              onClick={() => setCategoriType(id)}
+              className={categotiType === id ? "active" : ""}
               key={id}
             >
               {categori}
-              {/* {console.log(props.categotiType)} */}
             </li>
           );
         })}

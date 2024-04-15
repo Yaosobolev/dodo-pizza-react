@@ -2,9 +2,19 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const FullPizza = () => {
+type Pizza = {
+  imageUrl: string;
+  title: string;
+  price: number;
+};
+
+const FullPizza: React.FC = () => {
   const { id } = useParams();
-  const [pizza, setPizza] = useState({});
+  const [pizza, setPizza] = useState<Pizza>({
+    imageUrl: "",
+    title: "",
+    price: 0,
+  });
 
   const getPizza = async () => {
     const { data } = await axios.get(
@@ -20,12 +30,19 @@ const FullPizza = () => {
     }
   }, []);
   console.log(pizza);
+
   return (
-    <div className="container">
-      <img src={pizza.imageUrl} alt="" />
-      <h2>{pizza.title}</h2>
-      <h4>{pizza.price}</h4>
-    </div>
+    <>
+      {Object.keys(pizza).length !== 0 ? (
+        <div className="container">
+          <img src={pizza.imageUrl} alt="" />
+          <h2>{pizza.title}</h2>
+          <h4>{pizza.price}</h4>
+        </div>
+      ) : (
+        <span>Загрузка</span>
+      )}
+    </>
   );
 };
 
