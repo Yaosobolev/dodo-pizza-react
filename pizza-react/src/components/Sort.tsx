@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { selectFilter, setSortType } from "../redux/slices/filterSlice";
+import { useState, memo } from "react";
+import { setSortType } from "../redux/slices/filterSlice";
 import { useAppDispatch } from "../redux/store";
 
-const Sort: React.FC = () => {
+type SortProps = {
+  value: number;
+};
+
+const Sort: React.FC<SortProps> = memo(({ value }) => {
   const dispath = useAppDispatch();
-  const { sortType } = useSelector(selectFilter);
   const [open, setOpen] = useState<boolean>(false);
   const sorts: string[] = ["популярности", "цене", "алфавиту"];
 
@@ -13,6 +15,7 @@ const Sort: React.FC = () => {
     dispath(setSortType(index));
     setOpen(false);
   };
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -29,7 +32,7 @@ const Sort: React.FC = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{sorts[sortType]}</span>
+        <span onClick={() => setOpen(!open)}>{sorts[value]}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -39,7 +42,7 @@ const Sort: React.FC = () => {
                 <li
                   key={index}
                   onClick={() => listItemHandle(index)}
-                  className={index === sortType ? "active" : ""}
+                  className={index === value ? "active" : ""}
                 >
                   {sort}
                 </li>
@@ -50,6 +53,6 @@ const Sort: React.FC = () => {
       )}
     </div>
   );
-};
+});
 
 export default Sort;

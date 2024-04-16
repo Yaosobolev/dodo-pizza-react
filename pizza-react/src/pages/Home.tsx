@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 
@@ -26,9 +26,9 @@ const Home: React.FC = () => {
   const dispath = useAppDispatch();
   const navigate = useNavigate();
 
-  const onClickCategoriType = (id: number): void => {
+  const onClickCategoriType = useCallback((id: number): void => {
     dispath(setCategotiType(id));
-  };
+  }, []);
   const handleSearch = searchValue ? `&search=${searchValue}` : "";
   const getSortField = (index: number): string =>
     ["rating", "price", "title"][index] || "title";
@@ -67,6 +67,10 @@ const Home: React.FC = () => {
     navigate(`?${querryString}`);
   }, [categotiType, sortType, selectPage]);
 
+  const countPage = useMemo(() => {
+    return Math.ceil(countPages / 4);
+  }, [countPages]);
+
   return (
     <div className="container">
       <div className="content__top">
@@ -74,7 +78,7 @@ const Home: React.FC = () => {
           categotiType={categotiType}
           setCategoriType={onClickCategoriType}
         />
-        <Sort />
+        <Sort value={sortType} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === "error" ? (
@@ -94,7 +98,7 @@ const Home: React.FC = () => {
         </div>
       )}
 
-      <Pagination countPage={Math.ceil(countPages / 4)} />
+      <Pagination countPage={countPage} />
     </div>
   );
 };

@@ -3,13 +3,13 @@ import { selectFilter, setSelectPage } from "../../redux/slices/filterSlice";
 
 import style from "./CountPage.module.scss";
 import { useAppDispatch } from "../../redux/store";
+import { memo } from "react";
 
 type CountPageProps = {
   index: number;
-  name: number;
 };
 
-export const CountPage: React.FC<CountPageProps> = ({ index, name }) => {
+export const CountPage: React.FC<CountPageProps> = memo(({ index }) => {
   const { selectPage } = useSelector(selectFilter);
   const dispatch = useAppDispatch();
 
@@ -23,8 +23,8 @@ export const CountPage: React.FC<CountPageProps> = ({ index, name }) => {
         onClick={() => CountPageHandler(index)}
         className={index === selectPage ? style.selected : style.root}
       >
-        {name}
+        {index}
       </div>
     </>
   );
-};
+});

@@ -13,7 +13,6 @@ export const fetchPizzas = createAsyncThunk<PizzaItem[], fetchPizzasArg>(
   "pizza/fetchPizzasStatus",
   async (params) => {
     const { selectPage, categotiType, sortType, handleSearch } = params;
-    console.log("handleSearch", typeof handleSearch);
 
     const Sortw = (index: number) => {
       if (index === 0) return "rating";
