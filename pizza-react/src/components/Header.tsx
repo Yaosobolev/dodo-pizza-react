@@ -3,12 +3,15 @@ import { Search } from "./Search";
 import { useSelector } from "react-redux";
 
 import logoSvg from "../assets/img/pizza-logo.svg";
-import { selectCart } from "../redux/slices/cartSlice";
+import { selectCart } from "../redux/cart/selectors";
+import { countPizzas } from "../utils/countPizzas";
 
 const Header: React.FC = () => {
   const { pizzas, amount } = useSelector(selectCart);
 
   const location = useLocation();
+
+  const count = countPizzas(pizzas);
 
   return (
     <div className="header">
@@ -57,7 +60,7 @@ const Header: React.FC = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span>{pizzas.length}</span>
+              <span>{count}</span>
             </Link>
           )}
         </div>

@@ -1,21 +1,18 @@
 import { useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
-
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { Pagination } from "../components/Pagination";
 import { useSelector } from "react-redux";
-import {
-  setCategotiType,
-  setSelectPage,
-  selectFilter,
-  fetchCountPage,
-} from "../redux/slices/filterSlice";
-import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice";
+import { setCategotiType, setSelectPage } from "../redux/filter/slice";
+import { fetchPizzas } from "../redux/pizza/asyncActions";
 import { useAppDispatch } from "../redux/store";
+import { selectFilter } from "../redux/filter/selectors";
+import { selectPizza } from "../redux/pizza/selectors";
+import { fetchCountPage } from "../redux/filter/asyncActions";
 
 const Home: React.FC = () => {
   const { categotiType, sortType, countPages, selectPage, searchValue } =
@@ -71,6 +68,12 @@ const Home: React.FC = () => {
     return Math.ceil(countPages / 4);
   }, [countPages]);
 
+  const pizzas = Items.map((pizza: any, index: number) => {
+    return <PizzaBlock {...pizza} key={index} />;
+  });
+  const skeletons = [...new Array(8)].map((_, id) => {
+    return <Skeleton key={id} />;
+  });
   return (
     <div className="container">
       <div className="content__top">
@@ -88,13 +91,7 @@ const Home: React.FC = () => {
         </div>
       ) : (
         <div className="content__items">
-          {status == "loading"
-            ? [...new Array(8)].map((_, id) => {
-                return <Skeleton key={id} />;
-              })
-            : Items.map((pizza: any, index: number) => {
-                return <PizzaBlock {...pizza} key={index} />;
-              })}
+          {status == "loading" ? skeletons : pizzas}
         </div>
       )}
 
@@ -104,4 +101,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-// Все пиццы

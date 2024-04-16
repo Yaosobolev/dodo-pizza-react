@@ -1,5 +1,5 @@
 import { useState, memo } from "react";
-import { setSortType } from "../redux/slices/filterSlice";
+import { setSortType } from "../redux/filter/slice";
 import { useAppDispatch } from "../redux/store";
 
 type SortProps = {

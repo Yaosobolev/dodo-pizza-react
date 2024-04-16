@@ -1,24 +1,6 @@
-import axios from "axios";
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-
-export const fetchCountPage = createAsyncThunk<number>(
-  "filter/fetchCountPageStatus",
-  async () => {
-    const coutPageUrl = `https://65341c62e1b6f4c5904691be.mockapi.io/items?`;
-    const { data } = await axios.get(coutPageUrl);
-
-    return data.length;
-  }
-);
-
-interface FilterSliceState {
-  categotiType: number;
-  sortType: number;
-  countPages: number;
-  selectPage: number;
-  searchValue: string;
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FilterSliceState } from "./types";
+import { fetchCountPage } from "./asyncActions";
 
 const initialState: FilterSliceState = {
   categotiType: 0,
@@ -61,8 +43,6 @@ const filterSlice = createSlice({
     });
   },
 });
-
-export const selectFilter = (state: RootState) => state.filter;
 
 export const {
   setCategotiType,

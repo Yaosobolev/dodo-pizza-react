@@ -3,24 +3,34 @@ import { useSelector } from "react-redux";
 import CartPizza from "./CartPizza";
 import CartEmpty from "./CartEmpty";
 
-import {
-  setRemovePizzas,
-  setUniqPizzas,
-  setAmount,
-  selectCart,
-} from "../../redux/slices/cartSlice";
+import { setRemovePizzas, setAmount } from "../../redux/cart/slice";
 import { useAppDispatch } from "../../redux/store";
+import { countPizzas } from "../../utils/countPizzas";
+import { useEffect, useRef } from "react";
+import { selectCart } from "../../redux/cart/selectors";
 
 export const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { pizzas, amount, uniqPizzas } = useSelector(selectCart);
+  const { pizzas, amount } = useSelector(selectCart);
+
+  const count = countPizzas(pizzas);
+
+  const isMounted = useRef<boolean>(false);
 
   const handlerRemovePizzas = (): void => {
     dispatch(setRemovePizzas());
-    dispatch(setUniqPizzas());
     dispatch(setAmount());
   };
+
+  useEffect(() => {
+    const json = JSON.stringify(pizzas);
+
+    if (isMounted.current) {
+      localStorage.setItem("pizza", json);
+    }
+    isMounted.current = true;
+  }, [pizzas]);
 
   if (!amount) {
     return <CartEmpty />;
@@ -104,7 +114,7 @@ export const Cart: React.FC = () => {
           </div>
         </div>
         <div className="content__items">
-          {uniqPizzas.map((pizza: any, index: number) => {
+          {pizzas.map((pizza: any, index: number) => {
             return <CartPizza key={index} index={index} {...pizza} />;
           })}
         </div>
@@ -112,7 +122,7 @@ export const Cart: React.FC = () => {
           <div className="cart__bottom-details">
             <span>
               {" "}
-              Всего пицц: <b>{pizzas.length} шт.</b>{" "}
+              Всего пицц: <b>{count} шт.</b>{" "}
             </span>
             <span>
               {" "}

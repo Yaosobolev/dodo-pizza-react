@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  setUniqPizzas,
   setPizzas,
   setDecrementPizza,
   setAmount,
   setRemovePizza,
-  selectCart,
-} from "../../redux/slices/cartSlice";
+} from "../../redux/cart/slice";
 import { useAppDispatch } from "../../redux/store";
+import { selectCart } from "../../redux/cart/selectors";
 
 type CartPizzaProps = {
   id: string;
@@ -21,7 +20,6 @@ type CartPizzaProps = {
 };
 
 type CountSelectedPizza = number | undefined;
-type NameSelectedPizza = CartPizzaProps | undefined;
 
 const CartPizza: React.FC<CartPizzaProps> = ({
   id,
@@ -32,14 +30,16 @@ const CartPizza: React.FC<CartPizzaProps> = ({
   imageUrl,
 }) => {
   const dispatch = useAppDispatch();
-  const { uniqPizzas } = useSelector(selectCart);
+  const { pizzas } = useSelector(selectCart);
 
-  const countSelectedPizza = uniqPizzas.map((item: CartPizzaProps) => {
+  const isMounted = useRef<boolean>(false);
+
+  const countSelectedPizza = pizzas.map((item: CartPizzaProps) => {
     if (id === item.id && type === item.type && size === item.size) {
       return item.count;
     }
   });
-  const nameSelectedPizza = uniqPizzas.map((item: CartPizzaProps) => {
+  const nameSelectedPizza = pizzas.map((item: CartPizzaProps) => {
     if (title === item.title && type === item.type && size === item.size) {
       return item;
     }
@@ -53,30 +53,37 @@ const CartPizza: React.FC<CartPizzaProps> = ({
     (item: CartPizzaProps | undefined): item is CartPizzaProps =>
       item !== undefined
   );
+  console.log(checkCountSelectedPizza);
+
   const [counts, setCount] = useState<number>(Number(checkCountSelectedPizza));
 
   const handlerIncrement = (data: CartPizzaProps) => {
     setCount(counts + 1);
     dispatch(setPizzas(data));
-    dispatch(setUniqPizzas());
   };
 
-  useEffect(() => {
-    setCount(Number(checkCountSelectedPizza) + 1);
-    dispatch(setAmount());
-  }, [checkCountSelectedPizza]);
-
   const handlerDecrement = (): void => {
-    dispatch(setDecrementPizza(checkNameSelectedPizza));
-    dispatch(setUniqPizzas());
+    dispatch(setDecrementPizza(pizza));
     dispatch(setAmount());
   };
 
   const handlerRemovePizza = (): void => {
     dispatch(setRemovePizza(checkNameSelectedPizza));
-    dispatch(setUniqPizzas());
     dispatch(setAmount());
   };
+  useEffect(() => {
+    setCount(Number(checkCountSelectedPizza) + 1);
+    dispatch(setAmount());
+  }, [checkCountSelectedPizza]);
+
+  useEffect(() => {
+    const json = JSON.stringify(pizzas);
+
+    if (isMounted.current) {
+      localStorage.setItem("pizza", json);
+    }
+    isMounted.current = true;
+  }, [pizzas]);
 
   const pizza = {
     imageUrl: imageUrl,
@@ -87,6 +94,8 @@ const CartPizza: React.FC<CartPizzaProps> = ({
     id: id,
     count: counts,
   };
+
+  console.log();
 
   return (
     <div className="cart__item">
@@ -122,6 +131,7 @@ const CartPizza: React.FC<CartPizzaProps> = ({
             ></path>
           </svg>
         </div>
+        {/* count pizza */}
         <b>{checkCountSelectedPizza}</b>
         {/* +++++++++++++++++ */}
         <div

@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  setPizzas,
-  setUniqPizzas,
-  setAmount,
-  selectCart,
-} from "../../redux/slices/cartSlice";
+import { setPizzas, setAmount } from "../../redux/cart/slice";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../redux/store";
+import { selectCart } from "../../redux/cart/selectors";
 
 type PizzaBlockProps = {
   id: string;
@@ -43,9 +39,10 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
 
   const [sizeActive, setSizeActive] = useState<number>(0);
   const [typeActive, setTypeActive] = useState<number>(0);
-  const [counts, setCount] = useState<number>(1);
 
-  const { uniqPizzas } = useSelector(selectCart);
+  const { pizzas } = useSelector(selectCart);
+
+  const isMounted = useRef<boolean>(false);
 
   const typeName = ["тонкое", "традиционное", "толстое"];
   const sizeName = ["26", "30", "40"];
@@ -53,11 +50,9 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
   const handlerPizza = (data: Pizza): void => {
     dispatch(setPizzas(data));
     dispatch(setAmount());
-    dispatch(setUniqPizzas());
-    setCount(counts + 1);
   };
 
-  const countSelectedPizza = uniqPizzas.map((item: Pizza) => {
+  const countSelectedPizza = pizzas.map((item: Pizza) => {
     if (
       id === item.id &&
       typeName[typeActive] === item.type &&
@@ -70,15 +65,6 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
   const checkCountSelectedPizza = countSelectedPizza.filter(
     (item: CountSelectedPizza) => item !== undefined
   );
-
-  useEffect(() => {
-    setCount(
-      checkCountSelectedPizza.length !== 0
-        ? Number(checkCountSelectedPizza) + 1
-        : 1
-    );
-  }, [sizeName, typeName]);
-
   const pizza = {
     imageUrl: imageUrl,
     title: title,
@@ -86,8 +72,18 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
     type: typeName[typeActive],
     price: price,
     id: id,
-    count: counts,
+    count: Number(checkCountSelectedPizza),
   };
+
+  useEffect(() => {
+    const json = JSON.stringify(pizzas);
+
+    if (isMounted.current) {
+      localStorage.setItem("pizza", json);
+    }
+    isMounted.current = true;
+  }, [pizzas]);
+
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">

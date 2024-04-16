@@ -3,7 +3,7 @@ import { BsSearch } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 
 import style from "./Search.module.scss";
-import { setSearchValue } from "../../redux/slices/filterSlice";
+import { setSearchValue } from "../../redux/filter/slice";
 
 import debounce from "lodash.debounce";
 import { useAppDispatch } from "../../redux/store";
@@ -51,4 +51,3 @@ export const Search: React.FC = () => {
     </div>
   );
 };
-// "Поиск пиццы

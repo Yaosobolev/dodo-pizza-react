@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
-import { selectFilter, setSelectPage } from "../../redux/slices/filterSlice";
+import { setSelectPage } from "../../redux/filter/slice";
 
 import style from "./CountPage.module.scss";
 import { useAppDispatch } from "../../redux/store";
 import { memo } from "react";
+import { selectFilter } from "../../redux/filter/selectors";
 
 type CountPageProps = {
   index: number;
