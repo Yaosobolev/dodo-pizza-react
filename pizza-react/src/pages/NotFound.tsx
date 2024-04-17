@@ -1,5 +1,4 @@
-import { NotFoundBlock } from "../components/NotFoundBlock";
-import { Header } from "../components";
+import { Header, NotFoundBlock } from "../components";
 
 import "../scss/app.scss";
 

@@ -47,13 +47,12 @@ const router = createBrowserRouter([
   },
 ]);
 
-const rootElem = document.getElementById("root");
-if (rootElem) {
-  const root = ReactDOM.createRoot(rootElem);
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
 
-  root.render(
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  );
-}
+root.render(
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
+);
