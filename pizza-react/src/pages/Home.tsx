@@ -1,11 +1,13 @@
 import { useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
-import Categories from "../components/Categories";
-import Sort from "../components/Sort";
-import PizzaBlock from "../components/PizzaBlock";
-import Skeleton from "../components/PizzaBlock/Skeleton";
-import { Pagination } from "../components/Pagination";
+import {
+  Pagination,
+  Skeleton,
+  PizzaBlock,
+  Sort,
+  Categories,
+} from "../components";
 import { useSelector } from "react-redux";
 import { setCategotiType, setSelectPage } from "../redux/filter/slice";
 import { fetchPizzas } from "../redux/pizza/asyncActions";

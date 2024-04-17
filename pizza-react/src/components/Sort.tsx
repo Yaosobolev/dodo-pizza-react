@@ -6,7 +6,7 @@ type SortProps = {
   value: number;
 };
 
-const Sort: React.FC<SortProps> = memo(({ value }) => {
+export const Sort: React.FC<SortProps> = memo(({ value }) => {
   const dispath = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const sorts: string[] = ["популярности", "цене", "алфавиту"];
@@ -54,5 +54,3 @@ const Sort: React.FC<SortProps> = memo(({ value }) => {
     </div>
   );
 });
-
-export default Sort;

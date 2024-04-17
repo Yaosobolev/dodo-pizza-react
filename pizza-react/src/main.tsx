@@ -1,21 +1,27 @@
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./pages/Home";
 import App from "./App";
-import { NotFound } from "./pages/NotFound";
-import { Cart } from "./pages/Cart/index";
-import FullPizza from "./pages/FullPizza";
 
 import { store } from "./redux/store.js";
 import { Provider } from "react-redux";
 import "./index.css";
 
+const Cart = React.lazy(() => import("./pages/Cart/Cart"));
+const FullPizza = React.lazy(() => import("./pages/FullPizza"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <NotFound />,
+    errorElement: (
+      <Suspense fallback={<div>Загрузка страницы ошибки....</div>}>
+        <NotFound />
+      </Suspense>
+    ),
     children: [
       {
         path: "/",
@@ -23,11 +29,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: (
+          <Suspense fallback={<div>Загрузка корзины....</div>}>
+            <Cart />
+          </Suspense>
+        ),
       },
       {
         path: "/pizza/:id",
-        element: <FullPizza />,
+        element: (
+          <Suspense fallback={<div>Загрузка страницы с пиццей....</div>}>
+            <FullPizza />
+          </Suspense>
+        ),
       },
     ],
   },

@@ -9,7 +9,7 @@ import { countPizzas } from "../../utils/countPizzas";
 import { useEffect, useRef } from "react";
 import { selectCart } from "../../redux/cart/selectors";
 
-export const Cart: React.FC = () => {
+const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const { pizzas, amount } = useSelector(selectCart);
@@ -161,3 +161,5 @@ export const Cart: React.FC = () => {
     </div>
   );
 };
+
+export default Cart;

@@ -5,7 +5,7 @@ type CategoriesProps = {
   setCategoriType: (id: number) => void;
 };
 
-const Categories: React.FC<CategoriesProps> = memo(
+export const Categories: React.FC<CategoriesProps> = memo(
   ({ categotiType, setCategoriType }) => {
     const categories: string[] = [
       "Все",
@@ -34,5 +34,3 @@ const Categories: React.FC<CategoriesProps> = memo(
     );
   }
 );
-
-export default Categories;

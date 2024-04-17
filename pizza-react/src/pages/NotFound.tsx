@@ -1,9 +1,9 @@
 import { NotFoundBlock } from "../components/NotFoundBlock";
-import Header from "../components/Header";
+import { Header } from "../components";
 
 import "../scss/app.scss";
 
-export const NotFound: React.FC = () => {
+const NotFound: React.FC = () => {
   return (
     <>
       <div className="wrapper">
@@ -17,3 +17,4 @@ export const NotFound: React.FC = () => {
     </>
   );
 };
+export default NotFound;
